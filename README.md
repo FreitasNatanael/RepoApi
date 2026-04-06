@@ -1,69 +1,73 @@
-🛍️ Desafio Técnico: API de Gerenciamento de Vendas (ApiJulia)
+# 🛍️ Desafio Técnico: API de Gerenciamento de Vendas (ApiJulia)
 
 Esta é uma Web API robusta para o gerenciamento de um ecossistema de vendas. O projeto abrange desde o cadastro de clientes e catálogo de produtos até a inteligência complexa de processamento de pedidos com controle de estoque em tempo real.
 
-🛠️ Tecnologias Utilizadas
+---
 
-    Linguagem: C# (.NET 8.0)
+### 🛠️ Tecnologias Utilizadas
 
-    Banco de Dados: SQL Server (Dockerizado)
+* **Linguagem:** C# (.NET 8.0)
+* **Banco de Dados:** SQL Server (Dockerizado)
+* **ORM:** Entity Framework Core (Code First)
+* **Documentação:** Swagger UI (OpenAPI)
+* **Testes:** Insomnia / Postman
 
-    ORM: Entity Framework Core (Code First)
+---
 
-    Documentação: Swagger UI (OpenAPI)
+### 🧠 Regras de Negócio e Inteligência da API
 
-    Testes: Insomnia / Postman
+O diferencial desta aplicação está no controlador de **Pedidos (Orders)**, onde implementei:
 
-🧠 Regras de Negócio e Inteligência da API
+* ✅ **Validação de Carrinho:** Impede a criação de pedidos sem itens.
+* ✅ **Gestão de Estoque:** Valida a disponibilidade antes da venda. Se `Quantidade Solicitada > Estoque`, a API retorna um erro claro.
+* ✅ **Segurança de Preço:** O valor unitário é capturado do banco no momento do pedido, evitando que o cliente altere o preço via JSON (proteção contra fraudes).
+* ✅ **Cálculo de Totalizador:** Soma automática de todos os itens (`Quantidade x Preço Unitário`).
+* ✅ **Baixa em Tempo Real:** O estoque do produto é decrementado automaticamente após a confirmação do pedido.
+* ✅ **Precisão Decimal:** Configuração de `decimal(18,2)` para garantir que nenhum centavo seja perdido em arredondamentos.
 
-O diferencial desta aplicação está no controlador de Pedidos (Orders), onde implementei:
+---
 
-    ✅ Validação de Carrinho: Impede a criação de pedidos sem itens.
+### 🚀 Como Executar
 
-    ✅ Gestão de Estoque: Valida a disponibilidade antes da venda. Se Quantidade Solicitada > Estoque, a API retorna um erro claro.
+#### 1. Pré-requisitos
+* Visual Studio 2022.
+* Docker Desktop (para o SQL Server).
 
-    ✅ Segurança de Preço: O valor unitário é capturado do banco no momento do pedido, evitando que o cliente altere o preço via JSON (proteção contra fraudes).
+#### 2. Configurar o Banco
+Com o Docker Desktop aberto, execute no **Console do Gerenciador de Pacotes** (Ferramentas > Gerenciador de Pacotes NuGet > Console do Gerenciador de Pacotes):
 
-    ✅ Cálculo de Totalizador: Soma automática de todos os itens (Quantidade x Preço Unitário).
-
-    ✅ Baixa em Tempo Real: O estoque do produto é decrementado automaticamente após a confirmação do pedido.
-
-    ✅ Precisão Decimal: Configuração de decimal(18,2) para garantir que nenhum centavo seja perdido em arredondamentos.
-
-🚀 Como Executar
-1. Pré-requisitos
-
-    Visual Studio 2022.
-
-    Docker Desktop (para o SQL Server).
-
-2. Configurar o Banco
-
-Com o Docker Desktop aberto, execute no Console do Gerenciador de Pacotes(Ferramentas>Gerenciador de Pacotes NuGet>Console do Gerenciador de Pacotes):
-
+```bash
 docker compose up -d
+```
 
-Após, execute:
+Após o container estar rodando, execute:
 
+```bash
 Update-Database
+```
 
-3. Rodar
+#### 3. Rodar
+Aperte **F5**. O Swagger abrirá em: `http://localhost:5200/swagger/index.html`. Caso não abra automaticamente, copie e cole a URL no seu navegador.
 
-Aperte F5. O Swagger abrirá em: http://localhost:5200/swagger/index.html, caso não abra, copie e cole o URL no seu navegador de preferência.
+---
 
+### 🔌 Endpoints
 
-🔌 Endpoints
-Método	Rota	Descrição
-POST	/api/Customers	Cadastra um novo cliente
-GET	/api/Customers	Lista todos os clientes
-POST	/api/Products	Adiciona produto ao estoque
-GET	/api/Products	Lista catálogo de produtos
-POST	/api/Orders	Cria pedido e abate estoque
-GET	/api/Orders	Lista histórico de pedidos
+| Método | Rota | Descrição |
+| :--- | :--- | :--- |
+| **POST** | `/api/Customers` | Cadastra um novo cliente |
+| **GET** | `/api/Customers` | Lista todos os clientes |
+| **POST** | `/api/Products` | Adiciona produto ao estoque |
+| **GET** | `/api/Products` | Lista catálogo de produtos |
+| **POST** | `/api/Orders` | Cria pedido e abate estoque |
+| **GET** | `/api/Orders` | Lista histórico de pedidos |
 
-📄 Exemplo de Payload (Pedido)
-JSON
+---
 
+### 📄 Exemplo de Payload (Pedido)
+
+**POST** `/api/Orders`
+```json
 {
   "customerId": 1,
   "items": [
@@ -73,9 +77,14 @@ JSON
     }
   ]
 }
+```
 
-📄 Exemplo de Resposta
+---
 
+### 📄 Exemplos de Resposta
+
+#### Sucesso (201 Created)
+```json
 {
   "id": 10,
   "date": "2023-10-27T14:30:00",
@@ -90,14 +99,16 @@ JSON
     }
   ]
 }
+```
 
-Exemplo de Erro: Sem Estoque (400 Bad Request)
+#### Erro: Sem Estoque (400 Bad Request)
+> Quando o cliente tenta comprar mais do que há disponível na prateleira.
 
-Quando o cliente tenta comprar mais do que você tem na prateleira.
-
-Resposta:
-JSON
-
+```json
 {
   "error": "Produto sem estoque suficiente"
 }
+```
+
+---
+**Desenvolvido por Natanael Freitas**
