@@ -49,18 +49,29 @@ Update-Database
 #### 3. Rodar
 Aperte **F5**. O Swagger abrirá em: `http://localhost:5200/swagger/index.html`. Caso não abra automaticamente, copie e cole a URL no seu navegador.
 
----
+### 🔌 Endpoints da API
 
-### 🔌 Endpoints
-
+#### **👥 Clientes (Customers)**
 | Método | Rota | Descrição |
 | :--- | :--- | :--- |
+| **GET** | `/api/Customers` | Lista todos os clientes cadastrados |
+| **GET** | `/api/Customers/{id}` | Busca os detalhes de um cliente específico |
 | **POST** | `/api/Customers` | Cadastra um novo cliente |
-| **GET** | `/api/Customers` | Lista todos os clientes |
-| **POST** | `/api/Products` | Adiciona produto ao estoque |
-| **GET** | `/api/Products` | Lista catálogo de produtos |
-| **POST** | `/api/Orders` | Cria pedido e abate estoque |
-| **GET** | `/api/Orders` | Lista histórico de pedidos |
+| **PUT** | `/api/Customers/{id}` | Atualiza os dados de um cliente existente |
+| **DELETE** | `/api/Customers/{id}` | Remove um cliente do sistema |
+
+#### **📦 Produtos (Products)**
+| Método | Rota | Descrição |
+| :--- | :--- | :--- |
+| **GET** | `/api/Products` | Lista catálogo e saldo atual de estoque |
+| **POST** | `/api/Products` | Adiciona novos produtos ao inventário |
+
+#### **🛒 Pedidos (Orders)**
+| Método | Rota | Descrição |
+| :--- | :--- | :--- |
+| **GET** | `/api/Orders` | Lista todos os pedidos com seus respectivos itens |
+| **GET** | `/api/Orders/{id}` | Busca um pedido específico detalhado |
+| **POST** | `/api/Orders` | **Cria pedido, calcula total e abate estoque** |
 
 ---
 
